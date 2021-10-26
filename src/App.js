@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+const Title = () => {
+  return <h2 className="Title">Canvas Drag'n'Drop</h2>;
+};
+
+const Figures = () => {
+	return (
+    <div className="wrapper" id="noRightBorder">
+        <p className="sectionTitle">Figures</p>
+        <canvas width={250} height={700} />
+    </div>
+  );
+
+	
+};
+
+const Canvas = () => {
+
+	return (
+    <div className="wrapper">
+      <p className="sectionTitle">Canvas</p>
+      <canvas width={650} height={700} />
+    </div>
+  );
+};
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+			<Title />
+			<Figures />
+			<Canvas />
     </div>
   );
 }
