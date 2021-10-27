@@ -1,37 +1,21 @@
+import React, { useRef, useEffect } from "react";
 import "./App.css";
-
-const Title = () => {
-  return <h2 className="Title">Canvas Drag'n'Drop</h2>;
-};
-
-const Figures = () => {
-	return (
-    <div className="wrapper" id="noRightBorder">
-        <p className="sectionTitle">Figures</p>
-        <canvas width={250} height={700} />
-    </div>
-  );
-
-	
-};
-
-const Canvas = () => {
-
-	return (
-    <div className="wrapper">
-      <p className="sectionTitle">Canvas</p>
-      <canvas width={650} height={700} />
-    </div>
-  );
-};
+import Canvas from "./components/Canvas";
+import Figures from "./components/Figures";
 
 
 function App() {
   return (
     <div className="App">
-			<Title />
-			<Figures />
-			<Canvas />
+      <h2>Canvas Drag'n'Drop</h2>
+      <div className="wrapper" id="noRightBorder">
+        <p className="sectionTitle">Figures</p>
+        <Figures />
+      </div>
+      <div className="wrapper">
+        <p className="sectionTitle">Canvas</p>
+        <Canvas />
+      </div>
     </div>
   );
 }
