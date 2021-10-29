@@ -27,7 +27,8 @@ const getCircle = (x, y) => {
     y,
     radius: 65,
     type: "circle",
-    color: "#fb3291",
+		color: "#fb3291",
+		
   };
 };
 
@@ -44,7 +45,8 @@ const draw = (figure, ctx) => {
       ctx.fill();
       break;
     default:
-  }
+	}
+	ctx.closePath();
 };
 
 const Workspace = () => {
@@ -66,12 +68,14 @@ const Workspace = () => {
     drawBorder(ctx);
     const initialSquare = getSquare(60, 60);
     const initialCircle = getCircle(125, 315);
-    const otherCircle = getCircle(125, 505);
+		const otherCircle = getCircle(125, 505);
+		const otherSquare = getSquare(300, 300);
     setFigureCollection([
       ...figureCollection,
-      initialSquare,	
-      initialCircle,
       otherCircle,
+      initialSquare,
+      otherSquare,
+      initialCircle,
     ]);
   }, []);
 
@@ -88,11 +92,13 @@ const Workspace = () => {
         });
       } else if (previousFigureCollection.length > figureCollection.length) {
         //удалить элемент с канваса
-        ctx = canvas.current.getContext("2d");
+				ctx = canvas.current.getContext("2d");
+				ctx.beginPath()
         ctx.clearRect(0, 0, 900, 700);
         figureCollection.map((d) => {
           draw(d, ctx);
-        });
+				});
+				ctx.closePath();
       }
     }
   }, [figureCollection]);
@@ -108,35 +114,36 @@ const Workspace = () => {
     console.log("hitBox started");
     for (let i = 0; i < figureCollection.length; i++) {
       const box = figureCollection[i];
-      console.log("box.type", box.type);
-      switch (box.type) {
-        case "square":
-          if (
-            x >= box.x &&
-            x <= box.x + box.side &&
-            y >= box.y &&
-            y <= box.y + box.side
-					) {
-						          console.log("свитч решил что это сквеир", box.side);
 
-            dragTarget = box;
-            isTarget = true;
-            //break;
-          }
-          break;
-        case "circle":
-          if ((x - box.x) ^ 2 + (y - box.y) ^ 2 <= box.radius ^ 2) {
-						dragTarget = box;
-						          console.log("свитч решил что это сёркл", box.radius);
+      console.log(`for взял фигуру типа ${box.type}`);
 
-            isTarget = true;
-            //break;
-          }
-          break;
-        default:
+			if (box.type === "square") {
+				if (
+					x >= box.x &&
+					x <= box.x + box.side &&
+					y >= box.y &&
+					y <= box.y + box.side
+				) {
+					console.log("клик ВНУТРИ ЭТОГО сквеира");
+					dragTarget = box;
+					isTarget = true;
+					break;
+				} else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
 			}
-			break;
-		}
+      if (box.type === "circle") {
+				if (
+					(((x - box.x)*(x - box.x)) + ((y - box.y)*(y - box.y))) <= (box.radius*box.radius)
+					// x >= (box.x-box.radius) && x <= (box.x + box.radius) &&
+          // y >= (box.y-box.radius) && y <= (box.y + box.radius)
+				) {
+					console.log("клик ВНУТРИ ЭТОГО сёркла");
+          dragTarget = box;
+          isTarget = true;
+          break;
+        } else console.log("клик НЕ ВНУТРИ ЭТОГО сёркла");
+      }
+    }
+
     return isTarget;
   };
   //------------------------------------------------------------------------------
@@ -159,10 +166,12 @@ const Workspace = () => {
     dragTarget.x += dx;
     dragTarget.y += dy;
     //draw();
-    //ctx.clearRect(0, 0, 900, 700);
+		ctx.beginPath();
+    ctx.clearRect(0, 0, 900, 700);
     figureCollection.map((d) => {
       draw(d, ctx);
-    });
+		});
+		ctx.closePath();
   };
   const handleMouseUp = (e) => {
     console.log("mouse up copmleted");
@@ -172,14 +181,18 @@ const Workspace = () => {
   const handleMouseOut = (e) => {
     console.log("mouse out copmleted");
     handleMouseUp(e);
-  };
+	};
+	const handleClick = (e) => {
+		
+	}
   //------------------------------------------------------------------------------
   return (
     <canvas
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      onMouseOut={handleMouseOut}
+			onMouseOut={handleMouseOut}
+			onClick={handleClick}
       ref={canvas}
       width={900}
       height={700}
