@@ -8,7 +8,6 @@ const CIRCLE_TYPE = "circle";
 const SQUARE_SIDE = 130;
 const CIRCLE_RADIUS = 65;
 
-
 const drawBorder = (ctx) => {
   ctx.beginPath();
   ctx.moveTo(251, 0);
@@ -104,22 +103,18 @@ const Workspace = () => {
       }
     }
   }, [figureCollection]);
+
   //---------------------------------------------------------------------------
   let isDown = false;
   let dragTarget = null;
   let startX = null;
-	let startY = null;
-	let isInitial = null;
-  //---------------------------------------------------------------------------
+  let startY = null;
+
   // identify the click event in the rectangle
   const hitBox = (x, y) => {
     let isTarget = null;
-    console.log("hitBox started");
     for (let i = 0; i < figureCollection.length; i++) {
       const box = figureCollection[i];
-
-      console.log(`for взял фигуру типа ${box.type}`);
-
       if (box.type === SQUARE_TYPE) {
         if (
           x >= box.x &&
@@ -127,71 +122,66 @@ const Workspace = () => {
           y >= box.y &&
           y <= box.y + box.side
         ) {
-          console.log("клик ВНУТРИ ЭТОГО сквеира");
           dragTarget = box;
           isTarget = true;
           break;
-        } else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
+        }
       }
       if (box.type === CIRCLE_TYPE) {
         if (
           (x - box.x) * (x - box.x) + (y - box.y) * (y - box.y) <=
           box.radius * box.radius
         ) {
-          console.log("клик ВНУТРИ ЭТОГО сёркла");
           dragTarget = box;
           isTarget = true;
           break;
-        } else console.log("клик НЕ ВНУТРИ ЭТОГО сёркла");
+        }
       }
     }
-
     return isTarget;
   };
-  //----------------------------------------
+
+  //identify initial figure
   const isInitialFigure = (x, y) => {
     let isInitial = null;
     for (let i = 0; i < figureCollection.length; i++) {
       const box = figureCollection[i];
       if (box.type === SQUARE_TYPE) {
         if (
-          x >= 60 && x <= 60+SQUARE_SIDE &&
-          y >= 60 && y <= 60+SQUARE_SIDE
+          x >= 60 &&
+          x <= 60 + SQUARE_SIDE &&
+          y >= 60 &&
+          y <= 60 + SQUARE_SIDE
         ) {
-          //dragTarget = box;
           isInitial = true;
           break;
-        } else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
+        }
       }
       if (box.type === CIRCLE_TYPE) {
         if (
           (x - 125) * (x - 125) + (y - 315) * (y - 315) <=
           CIRCLE_RADIUS * CIRCLE_RADIUS
         ) {
-          //dragTarget = box;
           isInitial = true;
           break;
-        } else console.log("клик НЕ ВНУТРИ ЭТОГО сёркла");
+        }
       }
     }
-
     return isInitial;
   };
+
   //------------------------------------------------------------------------------
   const handleMouseDown = (e) => {
-    console.log("mouse down copmleted");
     startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
     startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
-		isDown = hitBox(startX, startY);
-		isInitial = isInitialFigure(startX, startY);
+    isDown = hitBox(startX, startY);
 
-    if (isInitial) {
-			console.log('INITIAL')
-			isDown = null;
+    if (isInitialFigure(startX, startY)) {
+      console.log("INITIAL");
+      isDown = null;
     }
   };
   const handleMouseMove = (e) => {
-    console.log("mouse move copmleted");
     if (!isDown) return;
 
     const mouseX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
@@ -202,24 +192,20 @@ const Workspace = () => {
     startY = mouseY;
     dragTarget.x += dx;
     dragTarget.y += dy;
-    //draw();
-    drawBorder(ctx);
+
     ctx.beginPath();
     ctx.clearRect(0, 0, 900, 700);
     figureCollection.map((d) => {
       draw(d, ctx);
     });
     drawBorder(ctx);
-
     ctx.closePath();
   };
   const handleMouseUp = (e) => {
-    console.log("mouse up copmleted");
     dragTarget = null;
     isDown = false;
   };
   const handleMouseOut = (e) => {
-    console.log("mouse out copmleted");
     handleMouseUp(e);
   };
   const handleClick = (e) => {
@@ -228,8 +214,7 @@ const Workspace = () => {
     //появление новых фигур при клике на инишиал
     //при клике на НЕ инишиал - обводка + перенос наверх
     if (hitBox(startX, startY)) {
-      console.log("КЛИК");
-      // ctx.strokeStyle = '#272727'; /*"#0051ff";*/
+      // ctx.strokeStyle = '#272727';
       // ctx.lineWidth = 3;
       //ctx.stroke();
       //ctx.strokeRect(figure.x, figure.y, figure.side, figure.side);
