@@ -7,6 +7,8 @@ const SQUARE_TYPE = "square";
 const CIRCLE_TYPE = "circle";
 const SQUARE_SIDE = 130;
 const CIRCLE_RADIUS = 65;
+const IS_INITIAL = true;
+const NOT_INITIAL = false;
 
 const drawBorder = (ctx) => {
   ctx.beginPath();
@@ -16,20 +18,22 @@ const drawBorder = (ctx) => {
   ctx.closePath();
 };
 
-const getSquare = (x, y) => {
+const getSquare = (x, y, initial) => {
   return {
     x,
     y,
+    initial,
     side: SQUARE_SIDE,
     type: SQUARE_TYPE,
     color: YELLOW,
   };
 };
 
-const getCircle = (x, y) => {
+const getCircle = (x, y, initial) => {
   return {
     x,
     y,
+    initial,
     radius: CIRCLE_RADIUS,
     type: CIRCLE_TYPE,
     color: PINK,
@@ -69,22 +73,19 @@ const Workspace = () => {
   useEffect(() => {
     ctx = canvas.current.getContext("2d");
     drawBorder(ctx);
-    const initialSquare = getSquare(60, 60);
-    const initialCircle = getCircle(125, 315);
-    const otherCircle = getCircle(125, 505);
-    const otherSquare = getSquare(300, 300);
+    const initialSquare = getSquare(60, 60, IS_INITIAL);
+    const initialCircle = getCircle(125, 315, IS_INITIAL);
+    const otherCircle = getCircle(125, 505, NOT_INITIAL);
+    const otherSquare = getSquare(300, 300, NOT_INITIAL);
     setFigureCollection([
       ...figureCollection,
-      otherCircle,
       initialSquare,
-      otherSquare,
       initialCircle,
     ]);
   }, []);
 
   useEffect(() => {
     ctx = canvas.current.getContext("2d");
-
     if (previousFigureCollection) {
       if (previousFigureCollection.length < figureCollection.length) {
         const diff = figureCollection.filter(
@@ -122,8 +123,84 @@ const Workspace = () => {
           y >= box.y &&
           y <= box.y + box.side
         ) {
-          dragTarget = box;
-          isTarget = true;
+          if (!box.initial) {
+            dragTarget = box;
+            isTarget = true;
+            break;
+          }
+        }
+      }
+      if (box.type === CIRCLE_TYPE) {
+        if (
+          (x - box.x) * (x - box.x) + (y - box.y) * (y - box.y) <=
+          box.radius * box.radius
+        ) {
+          if (!box.initial) {
+            dragTarget = box;
+            isTarget = true;
+            break;
+          }
+        }
+      }
+    }
+
+    return isTarget;
+  };
+
+  //identify initial figure
+  const isInitial = (x, y) => {
+    let initialWasFound = false;
+    let somethingIsUpperInitial = false;
+    for (let i = 0; i < figureCollection.length; i++) {
+      const box = figureCollection[i];
+      if (box.type === SQUARE_TYPE) {
+        if (
+          x >= box.x &&
+          x <= box.x + box.side &&
+          y >= box.y &&
+          y <= box.y + box.side
+        ) {
+          if (box.initial) {
+            initialWasFound = true;
+          } else {
+            somethingIsUpperInitial = true;
+            break;
+          }
+        }
+      }
+      if (box.type === CIRCLE_TYPE) {
+        if (
+          (x - box.x) * (x - box.x) + (y - box.y) * (y - box.y) <=
+          box.radius * box.radius
+        ) {
+          if (box.initial) {
+            initialWasFound = true;
+          } else {
+            somethingIsUpperInitial = true;
+            break;
+          }
+        }
+      }
+    }
+    if (somethingIsUpperInitial) {
+      return false;
+    } else {
+      return initialWasFound;
+    }
+  };
+
+  const initialType = (x, y) => {
+    let initialType = null;
+    for (let i = 0; i < figureCollection.length; i++) {
+      const box = figureCollection[i];
+      if (box.type === SQUARE_TYPE) {
+        if (
+          x >= box.x &&
+          x <= box.x + box.side &&
+          y >= box.y &&
+          y <= box.y + box.side
+        ) {
+          initialType = SQUARE_TYPE;
           break;
         }
       }
@@ -132,58 +209,38 @@ const Workspace = () => {
           (x - box.x) * (x - box.x) + (y - box.y) * (y - box.y) <=
           box.radius * box.radius
         ) {
-          dragTarget = box;
-          isTarget = true;
+          initialType = CIRCLE_TYPE;
           break;
         }
       }
     }
-    return isTarget;
+    return initialType;
   };
-
-  //identify initial figure
-  const isInitialFigure = (x, y) => {
-    let isInitial = null;
-    for (let i = 0; i < figureCollection.length; i++) {
-      const box = figureCollection[i];
-      if (box.type === SQUARE_TYPE) {
-        if (
-          x >= 60 &&
-          x <= 60 + SQUARE_SIDE &&
-          y >= 60 &&
-          y <= 60 + SQUARE_SIDE
-        ) {
-          isInitial = true;
-          break;
-        }
-      }
-      if (box.type === CIRCLE_TYPE) {
-        if (
-          (x - 125) * (x - 125) + (y - 315) * (y - 315) <=
-          CIRCLE_RADIUS * CIRCLE_RADIUS
-        ) {
-          isInitial = true;
-          break;
-        }
-      }
-    }
-    return isInitial;
-  };
-
   //------------------------------------------------------------------------------
   const handleMouseDown = (e) => {
     startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
     startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
     isDown = hitBox(startX, startY);
 
-    if (isInitialFigure(startX, startY)) {
-      console.log("INITIAL");
-      isDown = null;
+    if (isInitial(startX, startY)) {
+      let oneMoreFigure = null;
+      switch (initialType(startX, startY)) {
+        case SQUARE_TYPE:
+          oneMoreFigure = getSquare(60, 60, NOT_INITIAL);
+          break;
+        case CIRCLE_TYPE:
+          oneMoreFigure = getCircle(125, 315, NOT_INITIAL);
+          break;
+        default:
+          break;
+      }
+      setFigureCollection([...figureCollection, oneMoreFigure]);
+      dragTarget = oneMoreFigure;
     }
   };
+
   const handleMouseMove = (e) => {
     if (!isDown) return;
-
     const mouseX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
     const mouseY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
     const dx = mouseX - startX;
@@ -200,14 +257,18 @@ const Workspace = () => {
     });
     drawBorder(ctx);
     ctx.closePath();
+    // }
   };
+
   const handleMouseUp = (e) => {
     dragTarget = null;
     isDown = false;
   };
+
   const handleMouseOut = (e) => {
     handleMouseUp(e);
   };
+
   const handleClick = (e) => {
     startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
     startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
