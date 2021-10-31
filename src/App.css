@@ -7,7 +7,7 @@
 .wrapper {
   display: inline-block;
   line-height: 0;
-  border: 2px solid #7F7F7F;
+  border: 3px solid #272727;
 	background:transparent;
 }
 
@@ -17,12 +17,12 @@
   background: #e6e6e6;
   line-height: 35px;
   margin: 0;
-  border: 2px solid #7F7F7F;
+  border: 3px solid #272727;
 	font-size: 18px;
 }
 
 .figureTitle {
-  width: 250px;
+  width: 249px;
   border-right: 0px;
   border-bottom: 0px;
 }
