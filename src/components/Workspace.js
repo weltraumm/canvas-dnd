@@ -108,7 +108,8 @@ const Workspace = () => {
   let isDown = false;
   let dragTarget = null;
   let startX = null;
-  let startY = null;
+	let startY = null;
+	let isInitial = null;
   //---------------------------------------------------------------------------
   // identify the click event in the rectangle
   const hitBox = (x, y) => {
@@ -148,47 +149,46 @@ const Workspace = () => {
     return isTarget;
   };
   //----------------------------------------
-  // const isInitialFigure = (x, y) => {
-  //   let isInitial = null;
-  //   for (let i = 0; i < figureCollection.length; i++) {
-  //     const box = figureCollection[i];
-  //     if (box.type === "square") {
-  //       if (
-  //         x >= box.x &&
-  //         x <= box.x + box.side &&
-  //         y >= box.y &&
-  //         y <= box.y + box.side
-  //       ) {
-  //         dragTarget = box;
-  //         isInitial = true;
-  //         break;
-  //       } else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
-  //     }
-  //     if (box.type === "circle") {
-  //       if (
-  //         (x - box.x) * (x - box.x) + (y - box.y) * (y - box.y) <=
-  //         box.radius * box.radius
-  //       ) {
-  //         console.log("клик ВНУТРИ ЭТОГО сёркла");
-  //         dragTarget = box;
-  //         isTarget = true;
-  //         break;
-  //       } else console.log("клик НЕ ВНУТРИ ЭТОГО сёркла");
-  //     }
-  //   }
+  const isInitialFigure = (x, y) => {
+    let isInitial = null;
+    for (let i = 0; i < figureCollection.length; i++) {
+      const box = figureCollection[i];
+      if (box.type === SQUARE_TYPE) {
+        if (
+          x >= 60 && x <= 60+SQUARE_SIDE &&
+          y >= 60 && y <= 60+SQUARE_SIDE
+        ) {
+          //dragTarget = box;
+          isInitial = true;
+          break;
+        } else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
+      }
+      if (box.type === CIRCLE_TYPE) {
+        if (
+          (x - 125) * (x - 125) + (y - 315) * (y - 315) <=
+          CIRCLE_RADIUS * CIRCLE_RADIUS
+        ) {
+          //dragTarget = box;
+          isInitial = true;
+          break;
+        } else console.log("клик НЕ ВНУТРИ ЭТОГО сёркла");
+      }
+    }
 
-  //   return isTarget;
-  // };
+    return isInitial;
+  };
   //------------------------------------------------------------------------------
   const handleMouseDown = (e) => {
     console.log("mouse down copmleted");
     startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
     startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
-    isDown = hitBox(startX, startY);
+		isDown = hitBox(startX, startY);
+		isInitial = isInitialFigure(startX, startY);
 
-    // if (dragTarget == figureCollection[initialCircle] || figureCollection[initialSquare]) {
-    // 	console.log('WORKS')
-    // }
+    if (isInitial) {
+			console.log('INITIAL')
+			isDown = null;
+    }
   };
   const handleMouseMove = (e) => {
     console.log("mouse move copmleted");
