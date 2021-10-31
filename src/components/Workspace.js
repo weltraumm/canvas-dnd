@@ -1,11 +1,17 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable */
 import React, { useEffect, useRef, useState } from "react";
+
+const PINK = "#fb3291";
+const YELLOW = "#ffe533";
+const SQUARE_TYPE = "square";
+const CIRCLE_TYPE = "circle";
+const SQUARE_SIDE = 130;
+const CIRCLE_RADIUS = 65;
+
 
 const drawBorder = (ctx) => {
   ctx.beginPath();
   ctx.moveTo(251, 0);
-  ctx.fillStyle = "black";
   ctx.lineTo(251, 700);
   ctx.stroke();
   ctx.closePath();
@@ -15,9 +21,9 @@ const getSquare = (x, y) => {
   return {
     x,
     y,
-    side: 130,
-    type: "square",
-    color: "#ffe533",
+    side: SQUARE_SIDE,
+    type: SQUARE_TYPE,
+    color: YELLOW,
   };
 };
 
@@ -25,28 +31,26 @@ const getCircle = (x, y) => {
   return {
     x,
     y,
-    radius: 65,
-    type: "circle",
-		color: "#fb3291",
-		
+    radius: CIRCLE_RADIUS,
+    type: CIRCLE_TYPE,
+    color: PINK,
   };
 };
 
 const draw = (figure, ctx) => {
   ctx.beginPath();
+  ctx.fillStyle = figure.color;
   switch (figure.type) {
-    case "square":
-      ctx.fillStyle = figure.color;
+    case SQUARE_TYPE:
       ctx.fillRect(figure.x, figure.y, figure.side, figure.side);
       break;
-    case "circle":
-      ctx.fillStyle = figure.color;
+    case CIRCLE_TYPE:
       ctx.arc(figure.x, figure.y, figure.radius, 0, 2 * Math.PI);
       ctx.fill();
       break;
     default:
-	}
-	ctx.closePath();
+  }
+  ctx.closePath();
 };
 
 const Workspace = () => {
@@ -68,8 +72,8 @@ const Workspace = () => {
     drawBorder(ctx);
     const initialSquare = getSquare(60, 60);
     const initialCircle = getCircle(125, 315);
-		const otherCircle = getCircle(125, 505);
-		const otherSquare = getSquare(300, 300);
+    const otherCircle = getCircle(125, 505);
+    const otherSquare = getSquare(300, 300);
     setFigureCollection([
       ...figureCollection,
       otherCircle,
@@ -80,25 +84,23 @@ const Workspace = () => {
   }, []);
 
   useEffect(() => {
+    ctx = canvas.current.getContext("2d");
+
     if (previousFigureCollection) {
       if (previousFigureCollection.length < figureCollection.length) {
-        //отрисовать элемент
         const diff = figureCollection.filter(
           (i) => previousFigureCollection.indexOf(i) < 0
         );
-        ctx = canvas.current.getContext("2d");
         diff.map((d) => {
           draw(d, ctx);
         });
       } else if (previousFigureCollection.length > figureCollection.length) {
-        //удалить элемент с канваса
-				ctx = canvas.current.getContext("2d");
-				ctx.beginPath()
+        ctx.beginPath();
         ctx.clearRect(0, 0, 900, 700);
         figureCollection.map((d) => {
           draw(d, ctx);
-				});
-				ctx.closePath();
+        });
+        ctx.closePath();
       }
     }
   }, [figureCollection]);
@@ -117,26 +119,25 @@ const Workspace = () => {
 
       console.log(`for взял фигуру типа ${box.type}`);
 
-			if (box.type === "square") {
-				if (
-					x >= box.x &&
-					x <= box.x + box.side &&
-					y >= box.y &&
-					y <= box.y + box.side
-				) {
-					console.log("клик ВНУТРИ ЭТОГО сквеира");
-					dragTarget = box;
-					isTarget = true;
-					break;
-				} else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
-			}
-      if (box.type === "circle") {
-				if (
-					(((x - box.x)*(x - box.x)) + ((y - box.y)*(y - box.y))) <= (box.radius*box.radius)
-					// x >= (box.x-box.radius) && x <= (box.x + box.radius) &&
-          // y >= (box.y-box.radius) && y <= (box.y + box.radius)
-				) {
-					console.log("клик ВНУТРИ ЭТОГО сёркла");
+      if (box.type === SQUARE_TYPE) {
+        if (
+          x >= box.x &&
+          x <= box.x + box.side &&
+          y >= box.y &&
+          y <= box.y + box.side
+        ) {
+          console.log("клик ВНУТРИ ЭТОГО сквеира");
+          dragTarget = box;
+          isTarget = true;
+          break;
+        } else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
+      }
+      if (box.type === CIRCLE_TYPE) {
+        if (
+          (x - box.x) * (x - box.x) + (y - box.y) * (y - box.y) <=
+          box.radius * box.radius
+        ) {
+          console.log("клик ВНУТРИ ЭТОГО сёркла");
           dragTarget = box;
           isTarget = true;
           break;
@@ -146,12 +147,48 @@ const Workspace = () => {
 
     return isTarget;
   };
+  //----------------------------------------
+  // const isInitialFigure = (x, y) => {
+  //   let isInitial = null;
+  //   for (let i = 0; i < figureCollection.length; i++) {
+  //     const box = figureCollection[i];
+  //     if (box.type === "square") {
+  //       if (
+  //         x >= box.x &&
+  //         x <= box.x + box.side &&
+  //         y >= box.y &&
+  //         y <= box.y + box.side
+  //       ) {
+  //         dragTarget = box;
+  //         isInitial = true;
+  //         break;
+  //       } else console.log("клик НЕ ВНУТРИ ЭТОГО сквеира");
+  //     }
+  //     if (box.type === "circle") {
+  //       if (
+  //         (x - box.x) * (x - box.x) + (y - box.y) * (y - box.y) <=
+  //         box.radius * box.radius
+  //       ) {
+  //         console.log("клик ВНУТРИ ЭТОГО сёркла");
+  //         dragTarget = box;
+  //         isTarget = true;
+  //         break;
+  //       } else console.log("клик НЕ ВНУТРИ ЭТОГО сёркла");
+  //     }
+  //   }
+
+  //   return isTarget;
+  // };
   //------------------------------------------------------------------------------
   const handleMouseDown = (e) => {
     console.log("mouse down copmleted");
     startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
     startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
     isDown = hitBox(startX, startY);
+
+    // if (dragTarget == figureCollection[initialCircle] || figureCollection[initialSquare]) {
+    // 	console.log('WORKS')
+    // }
   };
   const handleMouseMove = (e) => {
     console.log("mouse move copmleted");
@@ -166,12 +203,15 @@ const Workspace = () => {
     dragTarget.x += dx;
     dragTarget.y += dy;
     //draw();
-		ctx.beginPath();
+    drawBorder(ctx);
+    ctx.beginPath();
     ctx.clearRect(0, 0, 900, 700);
     figureCollection.map((d) => {
       draw(d, ctx);
-		});
-		ctx.closePath();
+    });
+    drawBorder(ctx);
+
+    ctx.closePath();
   };
   const handleMouseUp = (e) => {
     console.log("mouse up copmleted");
@@ -181,18 +221,28 @@ const Workspace = () => {
   const handleMouseOut = (e) => {
     console.log("mouse out copmleted");
     handleMouseUp(e);
-	};
-	const handleClick = (e) => {
-		
-	}
+  };
+  const handleClick = (e) => {
+    startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
+    startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
+    //появление новых фигур при клике на инишиал
+    //при клике на НЕ инишиал - обводка + перенос наверх
+    if (hitBox(startX, startY)) {
+      console.log("КЛИК");
+      // ctx.strokeStyle = '#272727'; /*"#0051ff";*/
+      // ctx.lineWidth = 3;
+      //ctx.stroke();
+      //ctx.strokeRect(figure.x, figure.y, figure.side, figure.side);
+    }
+  };
   //------------------------------------------------------------------------------
   return (
     <canvas
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-			onMouseOut={handleMouseOut}
-			onClick={handleClick}
+      onMouseOut={handleMouseOut}
+      onClick={handleClick}
       ref={canvas}
       width={900}
       height={700}
