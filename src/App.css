@@ -1,23 +1,33 @@
 .App {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  color: #212121;
-	text-align: center;
+  color: #272727;
+  text-align: center;
 }
 
 .wrapper {
   display: inline-block;
-	line-height: 0;
-	border:1px solid #212121;
+  line-height: 0;
+  border: 3px solid #272727;
+	background:transparent;
 }
 
-.sectionTitle{
-	text-align: center;
-	background:#cfcfcf ;
-	line-height: 35px;
-	margin: 0;
-	border-bottom:1px solid #212121;
+.titleSection {
+  display: inline-block;
+  text-align: center;
+  background: #e6e6e6;
+  line-height: 35px;
+  margin: 0;
+  border: 3px solid #272727;
+	font-size: 18px;
 }
 
-#noRightBorder{
-	border-right: 0px;
+.figureTitle {
+  width: 249px;
+  border-right: 0px;
+  border-bottom: 0px;
+}
+
+.canvasTitle {
+  width: 648px;
+  border-bottom: 0px;
 }

@@ -1,20 +1,17 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import "./App.css";
-import Canvas from "./components/Canvas";
-import Figures from "./components/Figures";
+import Workspace from "./components/Workspace";
 
 
 function App() {
   return (
     <div className="App">
       <h2>Canvas Drag'n'Drop</h2>
-      <div className="wrapper" id="noRightBorder">
-        <p className="sectionTitle">Figures</p>
-        <Figures />
-      </div>
+      <p className="titleSection figureTitle"><b>Figures</b></p>
+      <p className="titleSection canvasTitle"><b>Canvas</b></p>
+      <br />
       <div className="wrapper">
-        <p className="sectionTitle">Canvas</p>
-        <Canvas />
+        <Workspace />
       </div>
     </div>
   );

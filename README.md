@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+# Canvas Drag'n'drop
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was created with Create React App and React library only.
 
-## Available Scripts
+## requirements
 
-In the project directory, you can run:
+[+] - make a basic layout divided into two sections: Figures and Canvas
+[+] - square and circle are on Figures section
 
-### `npm start`
+[+] - implement the ability to drag shapes from Figures to Canvas in an unlimited number
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+[+] - when clicking on a shape with the left button, flip the selected shape by adding a border
+[] - if the shapes overlap each other - when selected, place the selected shape above overlapping shapes
+[+] - if the mouse button is held down, the shape should follow the user's cursor
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+[+] - the application should not allow the shape to go beyond the canvas when the mouse cursor is within the canvas
+[] - if the mouse cursor has left the canvas, you need to delete the dragged shape from canvas and display it under the user's cursor
 
-### `npm test`
+Implement the ability to delete shapes:
+[] - user can remove shapes by dragging the selected shape out of bounds
+canvas; the shape should be removed after the user releases the left mouse button
+[] - if the shape has been selected and is located within the canvas, you can delete it using the Delete button
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## optional requirements
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[] - implement the ability to save the state of the canvas between
+page reloads
+[] - implement the ability to import and export shapes located
+on canvas
