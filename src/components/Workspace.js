@@ -52,7 +52,6 @@ const draw = (figure, ctx) => {
       break;
     case CIRCLE_TYPE:
       ctx.arc(figure.x, figure.y, figure.radius, 0, 2 * Math.PI);
-
       ctx.fill();
       break;
     default:
@@ -61,7 +60,6 @@ const draw = (figure, ctx) => {
 };
 
 const drawStroke = (figure, ctx) => {
-  console.log("draw stroke");
   ctx.beginPath();
   ctx.strokeStyle = "#272727";
   ctx.lineWidth = 3;
@@ -143,14 +141,12 @@ const Workspace = () => {
     }
   }, [figureCollection]);
 
-  //---------------------------------------------------------------------------
   let isDown = false;
   let dragTarget = null;
   let startX = null;
   let startY = null;
   let onCanvas = false;
 
-  // identify the click event in the rectangle
   const hitBox = (x, y) => {
     let isTarget = null;
     for (let i = 0; i < figureCollection.length; i++) {
@@ -186,7 +182,6 @@ const Workspace = () => {
     return isTarget;
   };
 
-  //identify initial figure
   const isInitial = (x, y) => {
     let initialWasFound = false;
     let somethingIsUpperInitial = false;
@@ -255,8 +250,8 @@ const Workspace = () => {
     }
     return initialType;
   };
-  //------------------------------------------------------------------------------
-  const handleMouseDown = (e) => {
+
+	const handleMouseDown = (e) => {
     startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
     startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
     if (startX > 251) {
@@ -290,17 +285,8 @@ const Workspace = () => {
     const dy = mouseY - startY;
     startX = mouseX;
 		startY = mouseY;
-		// if (onCanvas) {
-			
-		// 	if(dragTarget.x > 250 && dragTarget.x < 770) {
-    //     dragTarget.x += dx;
-    //     dragTarget.y += dy;
-    //   }
-		// } else {
 			dragTarget.x += dx;
-      dragTarget.y += dy;
-		// }
-		
+      dragTarget.y += dy;		
     ctx.beginPath();
     ctx.clearRect(0, 0, 900, 700);
     figureCollection.map((d) => {
@@ -324,26 +310,12 @@ const Workspace = () => {
     handleMouseUp(e);
   };
 
-  const handleClick = (e) => {
-    startX = parseInt(e.nativeEvent.offsetX - canvas.current.clientLeft);
-    startY = parseInt(e.nativeEvent.offsetY - canvas.current.clientTop);
-    //появление новых фигур при клике на инишиал
-    //при клике на НЕ инишиал - обводка + перенос наверх
-    if (hitBox(startX, startY)) {
-      // ctx.strokeStyle = '#272727';
-      // ctx.lineWidth = 3;
-      //ctx.stroke();
-      //ctx.strokeRect(figure.x, figure.y, figure.side, figure.side);
-    }
-  };
-  //------------------------------------------------------------------------------
   return (
     <canvas
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseOut={handleMouseOut}
-      onClick={handleClick}
       ref={canvas}
       width={900}
       height={700}
