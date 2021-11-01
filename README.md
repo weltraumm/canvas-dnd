@@ -2,6 +2,8 @@
 
 This project was created with Create React App and React library only.
 
+...still in progress...
+
 ## requirements
 
 [+] - make a basic layout divided into two sections: Figures and Canvas
