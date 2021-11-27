@@ -1,33 +1,21 @@
 # Canvas Drag'n'drop
 
-This project was created with Create React App and React library only.
+This project was created with Create React App.
 
-...still in progress...
+Try it on https://weltraumm.github.io/canvas-dnd/
 
-## requirements
+## functionality
 
-[+] - make a basic layout divided into two sections: Figures and Canvas
-[+] - square and circle are on Figures section
+- there is basic layout divided into two sections: Figures and Canvas
 
-[+] - implement the ability to drag shapes from Figures to Canvas in an unlimited number
+- square and circle are on Figures section
 
-[+] - when clicking on a shape with the left button, flip the selected shape by adding a border
+- if user clicks on a shape in Figures section, new shape of the same type appears with stroke
 
-[-] - if the shapes overlap each other - when selected, place the selected shape above overlapping shapes
-[+] - if the mouse button is held down, the shape should follow the user's cursor
+- user has an ability to drag stroked shapes from Figures to Canvas in an unlimited number
 
-[+] - the application should not allow the shape to go beyond the canvas when the mouse cursor is within the canvas
+- if user clicks on a shape with the left button, the selected shape has a stroke
 
-[-] - if the mouse cursor has left the canvas, you need to delete the dragged shape from canvas and display it under the user's cursor
+- if the mouse button is held down, the shape follows the user's cursor
 
-Implement the ability to delete shapes:
-
-[-] - user can remove shapes by dragging the selected shape out of bounds canvas; the shape should be removed after the user releases the left mouse button
-
-[-] - if the shape has been selected and is located within the canvas, you can delete it using the Delete button
-
-## optional requirements
-
-[-] - implement the ability to save the state of the canvas between page reloads
-
-[-] - implement the ability to import and export shapes located on canvas
+- the application doesn't allow the shape to go beyond the canvas when the mouse cursor is within the canvas
