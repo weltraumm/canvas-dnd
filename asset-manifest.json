@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/canvas-dnd/static/css/main.f4bd31b0.chunk.css",
+    "main.js": "/canvas-dnd/static/js/main.c8c52e18.chunk.js",
+    "main.js.map": "/canvas-dnd/static/js/main.c8c52e18.chunk.js.map",
+    "runtime-main.js": "/canvas-dnd/static/js/runtime-main.4f8c4a93.js",
+    "runtime-main.js.map": "/canvas-dnd/static/js/runtime-main.4f8c4a93.js.map",
+    "static/js/2.05e72933.chunk.js": "/canvas-dnd/static/js/2.05e72933.chunk.js",
+    "static/js/2.05e72933.chunk.js.map": "/canvas-dnd/static/js/2.05e72933.chunk.js.map",
+    "index.html": "/canvas-dnd/index.html",
+    "static/css/main.f4bd31b0.chunk.css.map": "/canvas-dnd/static/css/main.f4bd31b0.chunk.css.map",
+    "static/js/2.05e72933.chunk.js.LICENSE.txt": "/canvas-dnd/static/js/2.05e72933.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4f8c4a93.js",
+    "static/js/2.05e72933.chunk.js",
+    "static/css/main.f4bd31b0.chunk.css",
+    "static/js/main.c8c52e18.chunk.js"
+  ]
+}
